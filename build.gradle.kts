@@ -10,12 +10,9 @@ buildscript {
     }
 }
 
+// Remove allprojects block or use without repositories
 allprojects {
-    repositories {
-        google()
-        mavenCentral()
-        maven { url = uri("https://jitpack.io") }
-    }
+    // Remove repositories block here since they're in settings
 }
 
 tasks.register("clean", Delete::class) {
