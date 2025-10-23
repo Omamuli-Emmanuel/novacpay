@@ -7,7 +7,7 @@ pluginManagement {
 }
 
 dependencyResolutionManagement {
-    repositoriesMode.set(RepositoriesMode.PREFER_PROJECT) // Change this line
+    repositoriesMode.set(RepositoriesMode.PREFER_PROJECT)
     repositories {
         google()
         mavenCentral()
@@ -15,4 +15,4 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "NovacPaymentSDK"
-include ':lib'
+include(":lib")
