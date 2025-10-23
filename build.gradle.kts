@@ -1,4 +1,3 @@
-// Top-level build file where you can add configuration options common to all sub-projects/modules.
 buildscript {
     repositories {
         google()
@@ -10,11 +9,7 @@ buildscript {
     }
 }
 
-// Remove allprojects block or use without repositories
-allprojects {
-    // Remove repositories block here since they're in settings
-}
-
+// No allprojects block - let settings handle repositories
 tasks.register("clean", Delete::class) {
     delete(rootProject.buildDir)
 }
