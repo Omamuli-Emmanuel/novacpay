@@ -10,13 +10,9 @@ A modern Android SDK for integrating Novac Payment checkout functionality into y
 ## ✨ Features
 
 - 🚀 **Easy Integration** - Simple setup and initialization
-- 🎨 **Customizable UI** - Brandable checkout experience
 - 🔒 **Secure** - Built with security best practices
 - 📱 **Native Android** - Fully compatible with Android Jetpack Compose and traditional Views
-- 🌐 **WebView Integration** - Seamless payment flow within your app
 - 📊 **Comprehensive Logging** - Detailed logging for debugging
-- 💰 **Multiple Currencies** - Support for various currencies
-- 👤 **Customer Management** - Easy customer data handling
 
 ## 📦 Installation
 
