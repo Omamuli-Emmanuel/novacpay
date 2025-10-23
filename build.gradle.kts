@@ -21,3 +21,27 @@ allprojects {
 tasks.register("clean", Delete::class) {
     delete(rootProject.buildDir)
 }
+
+// Add this to root project
+plugins {
+    id("maven-publish") apply false
+}
+
+subprojects {
+    afterEvaluate {
+        if (plugins.hasPlugin("com.android.library")) {
+            apply(plugin = "maven-publish")
+            
+            publishing {
+                publications {
+                    create<MavenPublication>("release") {
+                        from(components["release"])
+                        groupId = "com.github.Omamuli-Emmanuel"
+                        artifactId = "novacpay"
+                        version = "1.0.0"
+                    }
+                }
+            }
+        }
+    }
+}
