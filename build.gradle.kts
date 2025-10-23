@@ -22,16 +22,12 @@ tasks.register("clean", Delete::class) {
     delete(rootProject.buildDir)
 }
 
-// Add this to root project
-plugins {
-    id("maven-publish") apply false
-}
-
+// Configure publishing for all library subprojects
 subprojects {
-    afterEvaluate {
-        if (plugins.hasPlugin("com.android.library")) {
-            apply(plugin = "maven-publish")
-            
+    plugins.withId("com.android.library") {
+        apply(plugin = "maven-publish")
+        
+        afterEvaluate {
             publishing {
                 publications {
                     create<MavenPublication>("release") {
