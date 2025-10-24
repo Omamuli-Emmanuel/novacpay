@@ -29,6 +29,14 @@ android {
     kotlinOptions {
         jvmTarget = "11"
     }
+    
+    // Explicitly configure publishing variants
+    publishing {
+        singleVariant("release") {
+            withSourcesJar()
+            withJavadocJar()
+        }
+    }
 }
 
 dependencies {
@@ -40,22 +48,19 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
 }
 
-// Fix publishing configuration
+// Publishing configuration that works with JitPack
 afterEvaluate {
     publishing {
         publications {
             create<MavenPublication>("release") {
-                // Use the release variant
+                // Use the release component
                 from(components["release"])
                 
                 groupId = "com.github.Omamuli-Emmanuel"
                 artifactId = "novacpay"
                 version = "1.0.0"
                 
-                // Add artifact configuration
-                artifact(tasks.getByName("bundleReleaseAar"))
-                
-                // Configure POM
+                // Add POM metadata
                 pom {
                     name.set("Novac Payment Android SDK")
                     description.set("Android SDK for Novac Payment integration")
@@ -73,6 +78,12 @@ afterEvaluate {
                             id.set("Omamuli-Emmanuel")
                             name.set("Omamuli Emmanuel")
                         }
+                    }
+                    
+                    scm {
+                        connection.set("scm:git:github.com/Omamuli-Emmanuel/novacpay.git")
+                        developerConnection.set("scm:git:ssh://github.com/Omamuli-Emmanuel/novacpay.git")
+                        url.set("https://github.com/Omamuli-Emmanuel/novacpay")
                     }
                 }
             }
