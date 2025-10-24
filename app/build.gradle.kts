@@ -21,6 +21,7 @@ android {
         }
     }
     
+    // Configure publishing variants
     publishing {
         singleVariant("release") {
             withSourcesJar()
@@ -38,24 +39,63 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
 }
 
-afterEvaluate {
-    publishing {
-        publications {
-            create<MavenPublication>("release") {
-                from(components["release"])
-                groupId = "com.github.Omamuli-Emmanuel"
-                artifactId = "novacpay"
-                version = "1.0.0"
+// Create sources JAR task
+val sourcesJar by tasks.registering(Jar::class) {
+    archiveClassifier.set("sources")
+    from(android.sourceSets["main"].java.srcDirs)
+}
+
+// Create javadoc JAR task (empty for now, but required)
+val javadocJar by tasks.registering(Jar::class) {
+    archiveClassifier.set("javadoc")
+}
+
+// Configure publishing - this must run
+publishing {
+    publications {
+        create<MavenPublication>("mavenPublication") {
+            // Use the bundleReleaseAar task output
+            artifact(tasks.getByName("bundleReleaseAar"))
+            artifact(sourcesJar.get())
+            artifact(javadocJar.get())
+            
+            groupId = "com.github.Omamuli-Emmanuel"
+            artifactId = "novacpay"
+            version = "1.0.0"
+            
+            // Add POM configuration
+            pom {
+                name.set("Novac Payment Android SDK")
+                description.set("Android SDK for Novac Payment integration")
+                url.set("https://github.com/Omamuli-Emmanuel/novacpay")
+                
+                licenses {
+                    license {
+                        name.set("Apache License 2.0")
+                        url.set("https://opensource.org/licenses/Apache-2.0")
+                    }
+                }
+                
+                developers {
+                    developer {
+                        id.set("Omamuli-Emmanuel")
+                        name.set("Omamuli Emmanuel")
+                    }
+                }
+                
+                scm {
+                    connection.set("scm:git:github.com/Omamuli-Emmanuel/novacpay.git")
+                    developerConnection.set("scm:git:ssh://github.com/Omamuli-Emmanuel/novacpay.git")
+                    url.set("https://github.com/Omamuli-Emmanuel/novacpay")
+                }
             }
         }
     }
-    
-    // Ensure publishToMavenLocal task exists
-    tasks.register("publishToMavenLocal") {
-        group = "publishing"
-        val publishTask = tasks.findByName("publishReleasePublicationToMavenLocal")
-        if (publishTask != null) {
-            dependsOn(publishTask)
-        }
+}
+
+// Ensure publishToMavenLocal task exists and works
+afterEvaluate {
+    tasks.named("publishMavenPublicationPublicationToMavenLocal") {
+        dependsOn("bundleReleaseAar")
     }
 }
