@@ -1,8 +1,10 @@
 plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
-    id("maven-publish") // Add maven-publish plugin
 }
+
+// Apply maven-publish directly instead of using plugins block
+apply(plugin = "maven-publish")
 
 android {
     namespace = "com.novacpaymen.paywithnovac_android_skd"
@@ -29,12 +31,12 @@ android {
     }
     
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
     }
     
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "11"
     }
 }
 
@@ -56,16 +58,16 @@ dependencies {
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
 }
 
-// Add the publishing configuration
-afterEvaluate {
-    publishing {
-        publications {
-            create<MavenPublication>("maven") {
+// Simple publishing configuration without afterEvaluate
+publishing {
+    publications {
+        register<MavenPublication>("release") {
+            afterEvaluate {
                 from(components["release"])
-                groupId = "com.github.Omamuli-Emmanuel"
-                artifactId = "novacpay"
-                version = "1.0.0"
             }
+            groupId = "com.github.Omamuli-Emmanuel"
+            artifactId = "novacpay"
+            version = "1.0.0"
         }
     }
 }
