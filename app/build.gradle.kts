@@ -1,7 +1,6 @@
 plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
-    id("maven-publish")
 }
 
 android {
@@ -36,6 +35,14 @@ android {
     kotlinOptions {
         jvmTarget = "11"
     }
+    
+    // Explicitly define the release variant for publishing
+    publishing {
+        singleVariant("release") {
+            withSourcesJar()
+            withJavadocJar()
+        }
+    }
 }
 
 dependencies {
@@ -52,10 +59,13 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.1")
 }
 
-afterEvaluate {
-    publishing {
-        publications {
-            create<MavenPublication>("release") {
+// Apply maven-publish and configure it
+apply(plugin = "maven-publish")
+
+publishing {
+    publications {
+        register<MavenPublication>("release") {
+            afterEvaluate {
                 from(components["release"])
                 groupId = "com.github.Omamuli-Emmanuel"
                 artifactId = "novacpay"
