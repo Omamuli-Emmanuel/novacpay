@@ -1,7 +1,7 @@
 plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
-    id("maven-publish") // Add maven-publish in plugins block
+    id("maven-publish")
 }
 
 android {
@@ -49,20 +49,7 @@ afterEvaluate {
                 groupId = "com.github.Omamuli-Emmanuel"
                 artifactId = "novacpay"
                 version = "1.0.0"
-                
-                // Add pom configuration
-                pom {
-                    name.set("Novac Payment Android SDK")
-                    description.set("Android SDK for Novac Payment integration")
-                    url.set("https://github.com/Omamuli-Emmanuel/novacpay")
-                }
             }
         }
-    }
-    
-    // Ensure the task is created
-    tasks.register("publishToMavenLocal") {
-        group = "publishing"
-        description = "Publishes the Maven publication to the local Maven repository."
     }
 }
