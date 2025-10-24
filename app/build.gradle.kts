@@ -1,29 +1,23 @@
 plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
+    id("maven-publish") // Add maven-publish in plugins block
 }
 
 android {
     namespace = "com.novacpaymen.paywithnovac_android_skd"
-    compileSdk = 34
+    compileSdk = 33
 
     defaultConfig {
         minSdk = 21
-        targetSdk = 34
+        targetSdk = 33
         versionCode = 1
         versionName = "1.0.0"
-
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        consumerProguardFiles.add(File("consumer-rules.pro"))
     }
 
     buildTypes {
         release {
             isMinifyEnabled = false
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
         }
     }
     
@@ -35,42 +29,40 @@ android {
     kotlinOptions {
         jvmTarget = "11"
     }
-    
-    // Explicitly define the release variant for publishing
-    publishing {
-        singleVariant("release") {
-            withSourcesJar()
-            withJavadocJar()
-        }
-    }
 }
 
 dependencies {
-    implementation("androidx.core:core-ktx:1.12.0")
+    implementation("androidx.core:core-ktx:1.9.0")
     implementation("androidx.appcompat:appcompat:1.6.1")
-    implementation("com.google.android.material:material:1.9.0")
-    
-    // Networking
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
-    implementation("com.squareup.okhttp3:logging-interceptor:4.11.0")
-    
-    // Coroutines
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.1")
+    implementation("com.squareup.okhttp3:logging-interceptor:4.10.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
 }
 
-// Apply maven-publish and configure it
-apply(plugin = "maven-publish")
-
-publishing {
-    publications {
-        register<MavenPublication>("release") {
-            afterEvaluate {
+// Configure publishing
+afterEvaluate {
+    publishing {
+        publications {
+            create<MavenPublication>("release") {
                 from(components["release"])
                 groupId = "com.github.Omamuli-Emmanuel"
                 artifactId = "novacpay"
                 version = "1.0.0"
+                
+                // Add pom configuration
+                pom {
+                    name.set("Novac Payment Android SDK")
+                    description.set("Android SDK for Novac Payment integration")
+                    url.set("https://github.com/Omamuli-Emmanuel/novacpay")
+                }
             }
         }
+    }
+    
+    // Ensure the task is created
+    tasks.register("publishToMavenLocal") {
+        group = "publishing"
+        description = "Publishes the Maven publication to the local Maven repository."
     }
 }
