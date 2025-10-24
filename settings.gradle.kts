@@ -6,13 +6,6 @@ pluginManagement {
     }
 }
 
-dependencyResolutionManagement {
-    repositoriesMode.set(RepositoriesMode.PREFER_PROJECT)
-    repositories {
-        google()
-        mavenCentral()
-    }
-}
-
+// Remove dependencyResolutionManagement to avoid conflicts
 rootProject.name = "NovacPaymentSDK"
 include(":lib")
