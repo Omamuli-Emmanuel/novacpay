@@ -21,15 +21,32 @@ tasks.register("clean", Delete::class) {
     delete(rootProject.buildDir)
 }
 
-// Add explicit publishToMavenLocal task at root level
+// Add both required tasks at root level
+tasks.register("assemble") {
+    group = "build"
+    description = "Assembles all variants of all applications and secondary packages."
+    // The dependency will be added after evaluation when tasks exist
+}
+
 tasks.register("publishToMavenLocal") {
     group = "publishing"
     description = "Publishes all Maven publications to the local Maven repository."
+    // The dependency will be added after evaluation when tasks exist
+}
+
+// Configure task dependencies after all projects are evaluated
+gradle.projectsEvaluated {
+    tasks.named("assemble") {
+        val libAssemble = project(":lib").tasks.findByName("assemble")
+        if (libAssemble != null) {
+            dependsOn(libAssemble)
+        }
+    }
     
-    // This will be configured after evaluation when all tasks are available
-    doFirst {
-        if (project.tasks.findByName(":lib:publishToMavenLocal") != null) {
-            dependsOn(":lib:publishToMavenLocal")
+    tasks.named("publishToMavenLocal") {
+        val libPublish = project(":lib").tasks.findByName("publishToMavenLocal")
+        if (libPublish != null) {
+            dependsOn(libPublish)
         }
     }
 }
