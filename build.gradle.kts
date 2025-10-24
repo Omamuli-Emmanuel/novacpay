@@ -21,21 +21,6 @@ tasks.register("clean", Delete::class) {
     delete(rootProject.buildDir)
 }
 
-// Root tasks that depend on library tasks
-tasks.register("assemble") {
-    group = "build"
-}
-
-tasks.register("publishToMavenLocal") {
-    group = "publishing"
-}
-
-gradle.projectsEvaluated {
-    tasks.named("assemble") {
-        dependsOn(":lib:assembleRelease")
-    }
-    
-    tasks.named("publishToMavenLocal") {
-        dependsOn(":lib:publishToMavenLocal")
-    }
-}
+// Simple task definitions - let Gradle handle the dependencies
+tasks.register("assemble")
+tasks.register("publishToMavenLocal")
