@@ -3,7 +3,7 @@ plugins {
     id("org.jetbrains.kotlin.android")
 }
 
-// Apply maven-publish directly instead of using plugins block
+// Apply maven-publish directly
 apply(plugin = "maven-publish")
 
 android {
@@ -27,6 +27,18 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+        }
+        // Explicitly define debug build type
+        debug {
+            isMinifyEnabled = false
+        }
+    }
+    
+    // Add this to ensure release build type is properly configured
+    publishing {
+        singleVariant("release") {
+            withSourcesJar()
+            withJavadocJar()
         }
     }
     
@@ -52,13 +64,9 @@ dependencies {
     
     // Coroutines
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.1")
-    
-    testImplementation("junit:junit:4.13.2")
-    androidTestImplementation("androidx.test.ext:junit:1.1.5")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
 }
 
-// Simple publishing configuration without afterEvaluate
+// Publishing configuration
 publishing {
     publications {
         register<MavenPublication>("release") {
