@@ -9,7 +9,6 @@ buildscript {
     }
 }
 
-// Add allprojects block back
 allprojects {
     repositories {
         google()
@@ -20,11 +19,4 @@ allprojects {
 
 tasks.register("clean", Delete::class) {
     delete(rootProject.buildDir)
-}
-
-// Add assemble task at root level
-tasks.register("assemble") {
-    dependsOn(":lib:assembleRelease")
-    group = "build"
-    description = "Assembles all variants of all applications and secondary packages."
 }
