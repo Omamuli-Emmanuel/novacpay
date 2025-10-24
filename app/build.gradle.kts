@@ -40,15 +40,41 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
 }
 
-// Configure publishing
+// Fix publishing configuration
 afterEvaluate {
     publishing {
         publications {
             create<MavenPublication>("release") {
+                // Use the release variant
                 from(components["release"])
+                
                 groupId = "com.github.Omamuli-Emmanuel"
                 artifactId = "novacpay"
                 version = "1.0.0"
+                
+                // Add artifact configuration
+                artifact(tasks.getByName("bundleReleaseAar"))
+                
+                // Configure POM
+                pom {
+                    name.set("Novac Payment Android SDK")
+                    description.set("Android SDK for Novac Payment integration")
+                    url.set("https://github.com/Omamuli-Emmanuel/novacpay")
+                    
+                    licenses {
+                        license {
+                            name.set("Apache License 2.0")
+                            url.set("https://opensource.org/licenses/Apache-2.0")
+                        }
+                    }
+                    
+                    developers {
+                        developer {
+                            id.set("Omamuli-Emmanuel")
+                            name.set("Omamuli Emmanuel")
+                        }
+                    }
+                }
             }
         }
     }
