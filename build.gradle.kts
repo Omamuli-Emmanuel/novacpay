@@ -20,18 +20,3 @@ allprojects {
 tasks.register("clean", Delete::class) {
     delete(rootProject.buildDir)
 }
-
-// Use afterEvaluate to ensure tasks exist
-afterEvaluate {
-    tasks.register("assemble") {
-        dependsOn(":lib:assembleRelease")
-        group = "build"
-        description = "Assembles all variants of all applications and secondary packages."
-    }
-
-    tasks.register("publishToMavenLocal") {
-        dependsOn(":lib:publishToMavenLocal")
-        group = "publishing"
-        description = "Publishes all Maven publications to the local Maven repository."
-    }
-}
