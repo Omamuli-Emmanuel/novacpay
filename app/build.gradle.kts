@@ -1,10 +1,8 @@
 plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
+    id("maven-publish")
 }
-
-// Apply maven-publish directly
-apply(plugin = "maven-publish")
 
 android {
     namespace = "com.novacpaymen.paywithnovac_android_skd"
@@ -27,18 +25,6 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
-        }
-        // Explicitly define debug build type
-        debug {
-            isMinifyEnabled = false
-        }
-    }
-    
-    // Add this to ensure release build type is properly configured
-    publishing {
-        singleVariant("release") {
-            withSourcesJar()
-            withJavadocJar()
         }
     }
     
@@ -66,16 +52,15 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.1")
 }
 
-// Publishing configuration
-publishing {
-    publications {
-        register<MavenPublication>("release") {
-            afterEvaluate {
+afterEvaluate {
+    publishing {
+        publications {
+            create<MavenPublication>("release") {
                 from(components["release"])
+                groupId = "com.github.Omamuli-Emmanuel"
+                artifactId = "novacpay"
+                version = "1.0.0"
             }
-            groupId = "com.github.Omamuli-Emmanuel"
-            artifactId = "novacpay"
-            version = "1.0.0"
         }
     }
 }
