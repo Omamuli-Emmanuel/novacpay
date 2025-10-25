@@ -37,7 +37,7 @@ dependencies {
     implementation 'com.github.novacpayment:novac-payment-android-sdk:1.0.0'
 }
 ```
-=======
+
 
 ## 🚀 Quick Start
 
