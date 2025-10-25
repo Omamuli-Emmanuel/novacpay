@@ -6,11 +6,11 @@ plugins {
 
 android {
     namespace = "com.novacpaymen.paywithnovac_android_skd"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         minSdk = 21
-        targetSdk = 33
+        targetSdk = 34
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
         // Library metadata
@@ -42,10 +42,7 @@ android {
     buildFeatures {
         buildConfig = true
         viewBinding = true
-        // REMOVED: compose = true
     }
-
-    // REMOVED: composeOptions block
 
     packagingOptions {
         resources {
@@ -88,19 +85,10 @@ dependencies {
     // JSON
     implementation("com.google.code.gson:gson:2.10.1")
 
-    // Testing
+    // Testing - Simplified to avoid compilation issues
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
-    androidTestImplementation("androidx.test:runner:1.5.2")
-    androidTestImplementation("androidx.test:rules:1.5.0")
-
-    // REMOVED: All Compose dependencies
-}
-
-val androidSourcesJar by tasks.registering(Jar::class) {
-    archiveClassifier.set("sources")
-    from(android.sourceSets["main"].java.srcDirs)
 }
 
 afterEvaluate {
@@ -112,11 +100,8 @@ afterEvaluate {
                 artifactId = "novacpay"
                 version = "1.0.0"
 
-                // Add the AAR artifact
+                // Add the AAR artifact from release variant
                 from(components["release"])
-
-                // Add sources JAR
-                artifact(androidSourcesJar.get())
 
                 // Configure POM for Maven Central standards
                 pom {
