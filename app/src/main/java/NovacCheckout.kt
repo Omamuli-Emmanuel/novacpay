@@ -248,18 +248,6 @@ class NovacCheckout private constructor() {
         customerPhone: String? = null,
         customizationData: CheckoutCustomizationData? = null
     ) {
-        Log.d("NovacSDK", "🚀 Launching complete checkout flow")
-        Log.d("NovacSDK", "📦 Customization data: ${if (customizationData != null) "Provided" else "Not provided"}")
-
-        // Log customization details
-        customizationData?.let { data ->
-            Log.d("NovacSDK", "🎨 Customization details:")
-            Log.d("NovacSDK", "  - Logo URL: ${data.logoUrl}")
-            Log.d("NovacSDK", "  - Payment Description: ${data.paymentDescription}")
-            Log.d("NovacSDK", "  - Modal Title: ${data.checkoutModalTitle}")
-        }
-
-        // Launch the loading activity which will handle the API call and WebView
         val intent = Intent(context, NovacCheckoutActivity::class.java).apply {
             putExtra("TRANSACTION_REFERENCE", transactionReference)
             putExtra("AMOUNT", amount)
@@ -269,20 +257,20 @@ class NovacCheckout private constructor() {
             putExtra("CUSTOMER_LAST_NAME", customerLastName)
             putExtra("CUSTOMER_PHONE", customerPhone)
 
-            // Add customization data if provided - use Bundle for complex objects
+            // Pass customization data as bundle
             customizationData?.let { data ->
-                val customizationBundle = Bundle().apply {
+                val bundle = Bundle().apply {
                     putString("LOGO_URL", data.logoUrl)
                     putString("PAYMENT_DESCRIPTION", data.paymentDescription)
                     putString("MODAL_TITLE", data.checkoutModalTitle)
                 }
-                putExtra("CUSTOMIZATION_DATA", customizationBundle)
-                Log.d("NovacSDK", "✅ Customization data added to intent")
+                putExtra("CUSTOMIZATION_DATA", bundle)
             }
+
             addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         }
+
         context.startActivity(intent)
-        Log.d("NovacSDK", "✅ Checkout flow activity launched")
     }
 
     /**

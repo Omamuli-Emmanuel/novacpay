@@ -1,21 +1,29 @@
+# app/proguard-rules.pro
 # Add project specific ProGuard rules here.
-# You can control the set of applied configuration files using the
-# proguardFiles setting in build.gradle.
-#
-# For more details, see
-#   http://developer.android.com/guide/developing/tools/proguard.html
 
-# If your project uses WebView with JS, uncomment the following
-# and specify the fully qualified class name to the JavaScript interface
-# class:
-#-keepclassmembers class fqcn.of.javascript.interface.for.webview {
-#   public *;
-#}
+# Keep your package structure
+-keep class com.novacpaymen.paywithnovac_android_skd.** { *; }
 
-# Uncomment this to preserve the line number information for
-# debugging stack traces.
-#-keepattributes SourceFile,LineNumberTable
+# Keep Retrofit
+-keepattributes Signature, InnerClasses, EnclosingMethod
+-keepattributes RuntimeVisibleAnnotations, RuntimeVisibleParameterAnnotations
 
-# If you keep the line number information, uncomment this to
-# hide the original source file name.
-#-renamesourcefileattribute SourceFile
+# Retrofit
+-keep class retrofit2.** { *; }
+-keepclasseswithmembers class * {
+    @retrofit2.http.* <methods>;
+}
+
+# OkHttp
+-keep class okhttp3.** { *; }
+-keep class okio.** { *; }
+
+# GSON
+-keep class com.google.gson.** { *; }
+-keep class com.google.gson.examples.android.model.** { *; }
+
+# Coroutines
+-keep class kotlinx.coroutines.** { *; }
+
+# Don't warn about anything in the library
+-dontwarn com.novacpaymen.paywithnovac_android_skd.**
