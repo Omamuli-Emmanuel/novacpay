@@ -27,6 +27,7 @@ allprojects {
     }
 }
 ```
+<<<<<<< HEAD
 # Add Dependency
 
 Add the dependency to your app-level `build.gradle` file:
@@ -36,6 +37,8 @@ dependencies {
     implementation 'com.github.novacpayment:novac-payment-android-sdk:1.0.0'
 }
 ```
+=======
+>>>>>>> 5e6b39049fb1b6bde149dca2d9f129323903bc42
 ## 🚀 Quick Start
 
 ### 1. Initialize the SDK
@@ -119,6 +122,7 @@ class FailureActivity : AppCompatActivity() {
     }
 }
 ```
+<<<<<<< HEAD
 #### `FailureActivity.kt`
 
 ```kotlin
@@ -146,6 +150,8 @@ class FailureActivity : AppCompatActivity() {
     }
 }
 ```
+=======
+>>>>>>> 5e6b39049fb1b6bde149dca2d9f129323903bc42
 ### 3. Launch Checkout Flow
 
 Use the simple method to launch checkout:
@@ -242,4 +248,7 @@ coroutineScope.launch {
 | `baseUrl`      | String  | ✅        | API base URL (use `https://api.novacpayment.com`) |
 | `apiKey`       | String  | ✅        | Your API key from Novac                         |
 | `enableLogging`| Boolean | ❌        | Enable debug logging (default: false)           |
+<<<<<<< HEAD
 
+=======
+>>>>>>> 5e6b39049fb1b6bde149dca2d9f129323903bc42
