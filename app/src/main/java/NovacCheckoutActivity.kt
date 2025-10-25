@@ -14,7 +14,6 @@ import com.novacpaymen.paywithnovac_android_skd.models.CheckoutCustomizationData
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class NovacCheckoutActivity : AppCompatActivity() {
 
@@ -42,14 +41,13 @@ class NovacCheckoutActivity : AppCompatActivity() {
         errorLayout = findViewById(R.id.errorLayout)
         errorMessage = findViewById(R.id.errorMessage)
         closeButton = findViewById(R.id.closeButton)
+
+        // Make sure this ID matches your XML layout file
         progressBar = findViewById(R.id.progressBar)
 
         closeButton.setOnClickListener {
             finish()
         }
-
-        // Show loading state initially
-        showLoading()
     }
 
     private fun startCheckoutProcess() {
@@ -64,24 +62,20 @@ class NovacCheckoutActivity : AppCompatActivity() {
         val customerLastName = intent.getStringExtra("CUSTOMER_LAST_NAME")
         val customerPhone = intent.getStringExtra("CUSTOMER_PHONE")
 
-        // Get customization data from intent
-        val customizationBundle = intent.getBundleExtra("CUSTOMIZATION_DATA")
-        val customizationData = if (customizationBundle != null) {
+        // Get customization data from intent - using direct string extras
+        val logoUrl = intent.getStringExtra("LOGO_URL")
+        val paymentDescription = intent.getStringExtra("PAYMENT_DESCRIPTION")
+        val checkoutModalTitle = intent.getStringExtra("MODAL_TITLE")
+
+        // Create CheckoutCustomizationData object instead of Map
+        val customizationData = if (!logoUrl.isNullOrEmpty() || !paymentDescription.isNullOrEmpty() || !checkoutModalTitle.isNullOrEmpty()) {
             CheckoutCustomizationData(
-                logoUrl = customizationBundle.getString("LOGO_URL"),
-                paymentDescription = customizationBundle.getString("PAYMENT_DESCRIPTION"),
-                checkoutModalTitle = customizationBundle.getString("MODAL_TITLE")
+                logoUrl = logoUrl,
+                paymentDescription = paymentDescription,
+                checkoutModalTitle = checkoutModalTitle
             )
         } else {
             null
-        }
-
-        // Validate required fields
-        if (transactionReference.isEmpty() || amount <= 0 || customerEmail.isEmpty()) {
-            val errorMsg = "Missing required parameters: transaction reference, amount, or customer email"
-            showError(errorMsg)
-            Log.e("NovacSDK", "❌ $errorMsg")
-            return
         }
 
         // Log all received data
@@ -122,15 +116,13 @@ class NovacCheckoutActivity : AppCompatActivity() {
                 Log.d("NovacSDK", "  - Customization Data Present: ${customizationData != null}")
 
                 // Make the actual API call
-                val response = withContext(Dispatchers.IO) {
-                    sdk.initiateCheckout(
-                        transactionReference = transactionReference,
-                        amount = amount,
-                        currency = currency,
-                        checkoutCustomerData = customerData,
-                        checkoutCustomizationData = customizationData
-                    )
-                }
+                val response = sdk.initiateCheckout(
+                    transactionReference = transactionReference,
+                    amount = amount,
+                    currency = currency,
+                    checkoutCustomerData = customerData,
+                    checkoutCustomizationData = customizationData
+                )
 
                 response.fold(
                     onSuccess = { successResponse ->
@@ -177,7 +169,6 @@ class NovacCheckoutActivity : AppCompatActivity() {
             loadingLayout.visibility = View.GONE
             errorLayout.visibility = View.VISIBLE
             errorMessage.text = message
-            progressBar.visibility = View.GONE
         }
     }
 
@@ -185,7 +176,6 @@ class NovacCheckoutActivity : AppCompatActivity() {
         runOnUiThread {
             loadingLayout.visibility = View.VISIBLE
             errorLayout.visibility = View.GONE
-            progressBar.visibility = View.VISIBLE
         }
     }
 }
